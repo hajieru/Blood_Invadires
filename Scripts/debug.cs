@@ -32,7 +32,7 @@ public class debug : MonoBehaviour
         if (canWhile == 1)
         {
             TextMeshProUGUI canvasText = gameObject.transform.GetChild(0).GetComponents<TextMeshProUGUI>()[0];
-            canvasText.text = $"Score_0: {Static.scores[0]} \n Score_1: {Static.scores[1]} ";
+            canvasText.text = $"Score_0: {Static.scores[0]} \n Score_1: {Static.scores[1]} \n BloodType: {Static.playerBloodType} ";
         }
         else {
             TextMeshProUGUI canvasText = gameObject.transform.GetChild(0).GetComponents<TextMeshProUGUI>()[0];

@@ -8,12 +8,26 @@ using UnityEngine.InputSystem;
 public class Static : MonoBehaviour
 {
     public static GameObject Bullet;
+    public static GameObject Enemy;
     public static InputDevice gamepad_0;
     public static InputDevice gamepad_1;
     public static int[] scores = new int[2];
+    public static string[] bloodTypes = new string[8];
+    public static string playerBloodType;
+    
     private void Awake()
     {
         Bullet = transform.GetChild(0).GameObject();
+        Enemy = transform.GetChild(1).GameObject();
+        bloodTypes[0] = "A-"; 
+        bloodTypes[1] = "B-";
+        bloodTypes[2] = "0+";
+        bloodTypes[3] = "B+";
+        bloodTypes[4] = "AB-";
+        bloodTypes[5] = "AB+";
+        bloodTypes[6] = "0-";
+        bloodTypes[7] = "A+";
+        playerBloodType = bloodTypes[Random.Range(0, 2)];
     }
     public static void CreateNewBullet(GameObject creator, int type)
     {
@@ -24,5 +38,9 @@ public class Static : MonoBehaviour
 
     public static void plusVariables(int type) {
         scores[type] += 300; 
+    }
+
+    public static void newEnemy() {
+        GameObject B = Instantiate(Enemy, new Vector2((Random.Range(0, 2) == 0 ? -4 : 4), 6), Quaternion.identity);
     }
 }
