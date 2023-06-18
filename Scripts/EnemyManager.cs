@@ -11,7 +11,6 @@ public class EnemyManager : MonoBehaviour
         if (i >= 10) {
             Static.newEnemy();
             new WaitForSecondsRealtime(2);
-            Static.newEnemy();
             i = 0;
         }
     }

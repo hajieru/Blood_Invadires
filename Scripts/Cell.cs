@@ -8,9 +8,9 @@ using UnityEngine.UI;
 public class Cell : MonoBehaviour
 {
     private string cellType = null;
-    float i;
-    bool leftOrRight;
+    int leftOrRight;
     float position;
+    float locatorY;
     private void Start()
     {
         new WaitForSeconds(2);
@@ -20,35 +20,19 @@ public class Cell : MonoBehaviour
 
     private void Update()
     {
-        i += 1 * Time.deltaTime;
+        transform.Translate(Vector3.right * Time.deltaTime * leftOrRight);
         position = transform.position.x;
-        if (position == 4)
+        if (position >= 4)
         {
-            leftOrRight = true;
+            transform.position = new Vector2(position, transform.position.y - 1);
+            leftOrRight = -1;
         }
-        if (position == -4) { 
-            leftOrRight= false;
+        else if (position <= -4)
+        {
+            transform.position = new Vector2(position, transform.position.y - 1);
+            leftOrRight = 1;
         }
-        if (i > 5) {
-            if (leftOrRight)
-            {
-                transform.Translate(-1, 0, 0);
-            }
-            else { 
-                transform.Translate(1, 0,0);
-            }
-            if (position == 4)
-            {
-                transform.position = new Vector2(position, transform.position.y - 1);
-                transform.position = new Vector2(position - 1, transform.position.y);
-            }
-            else if (position == -4)
-            {
-                transform.position = new Vector2(position, transform.position.y - 1);
-                transform.position = new Vector2(position + 1, transform.position.y);
-            }
-            i = 0;
-        }
+        locatorY = transform.position.y;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
