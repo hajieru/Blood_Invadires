@@ -24,7 +24,7 @@ public class bullet : MonoBehaviour
     }
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.gameObject.name == "AG_0") return;
+        if (collision.gameObject.tag == "Enemy") return;
         Destroy(gameObject);
 
     }

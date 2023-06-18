@@ -11,6 +11,7 @@ using static UnityEditor.Timeline.TimelinePlaybackControls;
 public class AC : MonoBehaviour
 {
     public int c;
+    float speed;
     private InputActionAsset inputAsset;
     private InputActionMap player;
     private InputAction move;
@@ -39,6 +40,21 @@ public class AC : MonoBehaviour
     }
     private void Update()
     {
-        transform.position = new Vector2(transform.position.x + (context.ReadValue<Vector2>().x > 0 ? 4f : -4f * (context.ReadValue<Vector2>().x == 0 ? 0 : 1) ) * Time.deltaTime, transform.position.y) ;
+        transform.position = new Vector2(transform.position.x + (context.ReadValue<Vector2>().x > 0 ? 8f : -8f * (context.ReadValue<Vector2>().x == 0 ? 0 : 1) ) * Time.deltaTime * speed, transform.position.y) ;
+        if (context.ReadValue<Vector2>().x < 0 || context.ReadValue<Vector2>().x > 0)
+        {
+            speed += Time.deltaTime;
+        }
+        else
+        {
+            speed = 0;
+        }
+        if (transform.position.x >= 6)
+        {
+            transform.position = new Vector2(-5.9f, transform.position.y);
+        }
+        else if (transform.position.x <= -6) { 
+            transform.position = new Vector2(5.9f, transform.position.y);
+        }
     }
 }

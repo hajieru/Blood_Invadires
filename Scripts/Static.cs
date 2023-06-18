@@ -17,8 +17,8 @@ public class Static : MonoBehaviour
     
     private void Awake()
     {
-        Bullet = transform.GetChild(0).GameObject();
-        Enemy = transform.GetChild(1).GameObject();
+        Bullet = Resources.Load("Objects/Bullet", typeof(GameObject)) as GameObject;
+        Enemy = Resources.Load("Objects/AG_0", typeof(GameObject)) as GameObject;
         bloodTypes[0] = "A-"; 
         bloodTypes[1] = "B-";
         bloodTypes[2] = "0+";

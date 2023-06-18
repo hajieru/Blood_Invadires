@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEditor.Build;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -11,28 +12,46 @@ public class Cell : MonoBehaviour
     int leftOrRight;
     float position;
     float locatorY;
+    float Ye;
+    float Speed;
+    bool Y;
     private void Start()
     {
         new WaitForSeconds(2);
         cellType = Static.bloodTypes[Random.Range(0, 8)];
         Debug.Log(cellType);
+        locatorY = transform.position.y;
+        position = transform.position.x;
     }
 
     private void Update()
     {
-        transform.Translate(Vector3.right * Time.deltaTime * leftOrRight);
-        position = transform.position.x;
+        Speed += 0.5f * Time.deltaTime;
         if (position >= 4)
         {
-            transform.position = new Vector2(position, transform.position.y - 1);
+            transform.Translate(Vector3.down * Time.deltaTime * 2);
             leftOrRight = -1;
+            Y = true;
+            Ye += 1 * Time.deltaTime;
         }
         else if (position <= -4)
         {
-            transform.position = new Vector2(position, transform.position.y - 1);
+            transform.Translate(Vector3.down * Time.deltaTime * 2);
             leftOrRight = 1;
+            Y = true;
+            Ye += 1 * Time.deltaTime;
         }
+        if (Ye >= 0.5f) {
+            Y = false;
+            Ye = 0;
+        }
+        if (Y) return;
+        transform.Translate(Vector3.right * Time.deltaTime * leftOrRight * 3 * Speed);
         locatorY = transform.position.y;
+        position = transform.position.x;
+        if (locatorY < -5) { 
+            Destroy(gameObject);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -41,24 +60,31 @@ public class Cell : MonoBehaviour
         if (bulletScript == null) return;
         if ((cellType.Contains("A")) && bulletScript.type == 0 && !Static.playerBloodType.Contains("A"))
         {
-            Static.scores[bulletScript.type] += 250;
-            Destroy(gameObject);
+            hitted(bulletScript, collision);
         }
         if ((cellType.Contains("B")) && bulletScript.type == 0 && !Static.playerBloodType.Contains("B"))
         {
-            Static.scores[bulletScript.type] += 250;
-            Destroy(gameObject);
+            hitted(bulletScript, collision);
         }
         if (cellType.Contains("+") && bulletScript.type == 1)
         {
-            Static.scores[bulletScript.type] += 250;
-            Destroy(gameObject);
+            hitted(bulletScript, collision);
         }
         if (cellType.Contains("AB") && bulletScript.type == 0)
         {
-            Static.scores[bulletScript.type] += 250;
-            Destroy(gameObject);
+            hitted(bulletScript, collision);
         }
+    }
+
+    private void hitted(bullet bulletScript, Collision2D collision)
+    {
+        Static.scores[bulletScript.type] += 250;
+        Destroy(gameObject); 
         Destroy(collision.gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        
     }
 }
