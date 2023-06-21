@@ -85,6 +85,7 @@ public class Cell : MonoBehaviour
 
     private void OnDestroy()
     {
-        
+        Static.newParticle(1, gameObject);
+        Static.newParticle(0, gameObject);
     }
 }
