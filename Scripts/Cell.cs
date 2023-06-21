@@ -13,7 +13,7 @@ public class Cell : MonoBehaviour
     float position;
     float locatorY;
     float Ye;
-    float Speed;
+    float Speed = 0;
     bool Y;
     private void Start()
     {
@@ -26,7 +26,9 @@ public class Cell : MonoBehaviour
 
     private void Update()
     {
-        Speed += 0.5f * Time.deltaTime;
+        if (Speed < 3) {
+            Speed += 0.5f * Time.deltaTime;
+        }
         if (position >= 4)
         {
             transform.Translate(Vector3.down * Time.deltaTime * 2);
@@ -49,7 +51,7 @@ public class Cell : MonoBehaviour
         transform.Translate(Vector3.right * Time.deltaTime * leftOrRight * 3 * Speed);
         locatorY = transform.position.y;
         position = transform.position.x;
-        if (locatorY < -5) { 
+        if (locatorY < -6) { 
             Destroy(gameObject);
         }
     }
@@ -81,10 +83,7 @@ public class Cell : MonoBehaviour
         Static.scores[bulletScript.type] += 250;
         Destroy(gameObject); 
         Destroy(collision.gameObject);
-    }
-
-    private void OnDestroy()
-    {
+        if (collision.gameObject.name == "CellDestroy") return;
         Static.newParticle(1, gameObject);
         Static.newParticle(0, gameObject);
     }

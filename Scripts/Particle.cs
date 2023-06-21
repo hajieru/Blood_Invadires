@@ -18,5 +18,8 @@ public class Particle : MonoBehaviour
     }
     private void Update()
     {
+        if (gameObject.GetComponent<ParticleSystem>().isStopped) { 
+            Destroy(gameObject);
+        }
     }
 }
