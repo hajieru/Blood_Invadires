@@ -2,11 +2,9 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class AC : MonoBehaviour
 {
@@ -15,9 +13,10 @@ public class AC : MonoBehaviour
     private InputActionAsset inputAsset;
     private InputActionMap player;
     private InputAction move;
-
+    bool fired;
     InputAction.CallbackContext context;
     private int i;
+    private float j;
     private void Awake()
     {
         inputAsset = this.GetComponent<PlayerInput>().actions;
@@ -27,7 +26,13 @@ public class AC : MonoBehaviour
     private void OnEnable()
     {
         move = player.FindAction("Move");
-        player.FindAction("Fire").started += Fire => { Static.CreateNewBullet(gameObject, c); };
+        player.FindAction("Fire").started += Fire => {
+            if (!fired)
+            {
+                Static.CreateNewBullet(gameObject, c);
+                fired = true;
+            } 
+        };
         move.performed += ctx => context = ctx;
         player.Enable();
     }
@@ -35,7 +40,6 @@ public class AC : MonoBehaviour
     private void OnDisable()
     {
         move.performed -= ctx => context = ctx;
-        player.FindAction("Fire").started -= Fire => { Static.CreateNewBullet(gameObject, c); };
         player.Disable();
     }
     private void Update()
@@ -55,6 +59,13 @@ public class AC : MonoBehaviour
         }
         else if (transform.position.x <= -6) { 
             transform.position = new Vector2(5.9f, transform.position.y);
+        }
+        if (fired && j < 0.15f) {
+            j += 1f * Time.deltaTime;
+        }
+        if (j >= 0.15f) {
+            j = 0;
+            fired = false;
         }
     }
 }

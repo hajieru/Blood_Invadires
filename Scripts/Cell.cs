@@ -1,14 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using UnityEditor.Build;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Cell : MonoBehaviour
 {
-    private string cellType = null;
+    public string cellType = null;
     int leftOrRight;
     float position;
     float locatorY;
@@ -22,12 +20,30 @@ public class Cell : MonoBehaviour
         Debug.Log(cellType);
         locatorY = transform.position.y;
         position = transform.position.x;
+        if (cellType.Contains("+"))
+        {
+            transform.GetChild(4).gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        }
+        if (cellType.Contains("0")) {
+            transform.GetChild(5).gameObject.GetComponent<SpriteRenderer>().enabled = true;
+            return;
+        }
+        if (cellType.Contains("AB")) {
+            transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        } else if (cellType.Contains("A")) {
+            transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        }
+        else if (cellType.Contains("B"))
+        {
+            transform.GetChild(3).gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        }
+
     }
 
     private void Update()
     {
-        if (Speed < 3) {
-            Speed += 0.5f * Time.deltaTime;
+        if (Speed < 6) {
+            Speed += 0.9f * Time.deltaTime;
         }
         if (position >= 4)
         {
@@ -84,7 +100,6 @@ public class Cell : MonoBehaviour
         Destroy(gameObject); 
         Destroy(collision.gameObject);
         if (collision.gameObject.name == "CellDestroy") return;
-        Static.newParticle(1, gameObject);
         Static.newParticle(0, gameObject);
     }
 }
